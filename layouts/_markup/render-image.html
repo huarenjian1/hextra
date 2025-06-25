@@ -8,6 +8,30 @@
 {{- $startsWithSlash := hasPrefix $dest "/" -}}
 {{- $startsWithRelative := hasPrefix $dest "../" -}}
 
+<!-- 新增：解析alt文本中的宽度参数（简化版本） -->
+{{- $width := "" -}}
+{{- if $alt -}}
+  {{- $altParts := split $alt "|" -}}
+  {{- $partsCount := len $altParts -}}
+  {{- if gt $partsCount 1 -}}
+    <!-- 获取最后一个部分 -->
+    {{- $lastPart := index $altParts (sub $partsCount 1) -}}
+    <!-- 检查是否纯数字 -->
+    {{- $isNumber := true -}}
+    {{- range $char := split $lastPart "" -}}
+      {{- if not (in "0123456789" $char) -}}
+        {{- $isNumber = false -}}
+      {{- end -}}
+    {{- end -}}
+    
+    {{- if and $lastPart $isNumber -}}
+      {{- $width = $lastPart -}}
+      <!-- 从alt文本中移除宽度部分 -->
+      {{- $alt = strings.TrimSuffix (print "|" $width) $alt -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
 {{- if and $dest $isLocal -}}
   {{- if $startsWithSlash -}}
     {{- with or (.PageInner.Resources.Get $url.Path) (resources.Get $url.Path) -}}
@@ -31,6 +55,10 @@
     {{- $pair := printf "%s=%q" $key ($value | transform.HTMLEscape) -}}
     {{- $attributes = printf "%s %s" $attributes $pair -}}
   {{- end -}}
+{{- end -}}
+
+{{- if $width -}}
+  {{- $attributes = printf `%s width="%s"` $attributes $width -}}
 {{- end -}}
 
 {{- with .Title -}}
