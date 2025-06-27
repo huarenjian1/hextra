@@ -7,6 +7,8 @@
         {{ partial "breadcrumb.html" . }}
         <div class="content">
           {{ if .Title }}<h1>{{ .Title }}</h1>{{ end }}
+          <h2>索引</h2>
+          {{ partial "huarenjianlist.html" . }}
           {{ .Content }}
         </div>
         {{ partial "components/last-updated.html" . }}

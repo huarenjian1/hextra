@@ -8,10 +8,10 @@
 {{- $navRoot := cond (eq site.Home.Type "docs") site.Home $context.FirstSection -}}
 {{- $pageURL := $context.RelPermalink -}}
 
-{{/* EXPERIMENTAL */}}
+{{/* EXPERIMENTAL 实验性功能：通过页面参数隐藏侧边栏 */}}
 {{- if .context.Params.sidebar.hide -}}
-  {{- $disableSidebar = true -}}
-  {{- $displayPlaceholder = true -}}
+  {{- $disableSidebar = true -}}      {{/* 强制禁用侧边栏 */}}
+  {{- $displayPlaceholder = true -}}  {{/* 强制显示占位符 */}}
 {{- end -}}
 
 
@@ -71,7 +71,7 @@
   {{- $level := .level -}}
   {{- $toc := .toc | default false -}}
 
-  {{- with $items := union .context.RegularPages .context.Sections -}}
+  {{- with $items := union .context.RegularPages.ByTitle .context.Sections -}}
     {{- $items = where $items "Params.sidebar.exclude" "!=" true -}}
     {{- if eq $level 0 -}}
       {{- range $items.ByWeight }}
