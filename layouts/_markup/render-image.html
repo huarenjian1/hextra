@@ -63,9 +63,10 @@
 
 {{- with .Title -}}
   <figure>
-    <img src="{{ $dest | safeURL }}" title="{{ . }}" alt="{{ $alt }}" {{ $attributes | safeHTMLAttr }} {{ if $lazyLoading }}loading="lazy"{{ end }} />
+    <img src="{{ $dest | safeURL }}" title="{{ . }}" alt="{{ $alt }}" {{ $attributes | safeHTMLAttr }} loading="lazy" />
     <figcaption>{{ . }}</figcaption>
   </figure>
 {{- else -}}
-  <img src="{{ $dest | safeURL }}" alt="{{ $alt }}" {{ $attributes | safeHTMLAttr }} {{ if $lazyLoading }}loading="lazy"{{ end }} />
+  <img src="{{ $dest | safeURL }}" alt="{{ $alt }}" {{ $attributes | safeHTMLAttr }} loading="lazy" />
 {{- end -}}
+<!-- {{ if $lazyLoading }}loading="lazy"{{ end }} -->
